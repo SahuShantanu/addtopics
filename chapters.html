@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapters</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="chapter-container">
+        <h2>Chapters</h2>
+        <div id="chapter-list"></div>
+        <p><a href="add-topic.html">Add a New Topic</a></p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chapterList = document.getElementById('chapter-list');
+            let chapters = JSON.parse(localStorage.getItem('chapters')) || [];
+
+            if (chapters.length === 0) {
+                chapterList.innerHTML = '<p>No topics available. Add a new topic!</p>';
+            } else {
+                chapters.forEach((chapter, index) => {
+                    const chapterDiv = document.createElement('div');
+                    chapterDiv.classList.add('chapter');
+                    chapterDiv.innerHTML = `
+                        <h3>Topic ${index + 1}: ${chapter.name}</h3>
+                        <p><strong>Creator:</strong> ${chapter.creator}</p>
+                        <p><strong>Date:</strong> ${chapter.date}</p>
+                        <p>${chapter.notes}</p>
+                        <button onclick="editTopic(${index})">Edit</button>
+                        <hr>
+                    `;
+                    chapterList.appendChild(chapterDiv);
+                });
+            }
+        });
+
+        function editTopic(index) {
+            let chapters = JSON.parse(localStorage.getItem('chapters'));
+            const chapter = chapters[index];
+
+            // Prompt user for new details
+            const newName = prompt("Edit Topic Name:", chapter.name);
+            const newNotes = prompt("Edit Notes:", chapter.notes);
+
+            if (newName && newNotes) {
+                chapter.name = newName;
+                chapter.notes = newNotes;
+                chapters[index] = chapter;
+                localStorage.setItem('chapters', JSON.stringify(chapters));
+                alert('Topic updated successfully!');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>

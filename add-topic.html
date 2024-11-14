@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Topic</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add New Topic</h2>
+        <form id="add-topic-form">
+            <label for="creator-name">Creator Name:</label>
+            <input type="text" id="creator-name" name="creator-name" required>
+
+            <label for="topic-name">Topic Name:</label>
+            <input type="text" id="topic-name" name="topic-name" required>
+
+            <label for="topic-notes">Notes:</label>
+            <textarea id="topic-notes" name="topic-notes" rows="5" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+        <p><a href="chapters.html">Go to Chapters</a></p>
+    </div>
+
+    <script>
+        document.getElementById('add-topic-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Get the topic details
+            const creatorName = document.getElementById('creator-name').value;
+            const topicName = document.getElementById('topic-name').value;
+            const topicNotes = document.getElementById('topic-notes').value;
+            const dateCreated = new Date().toLocaleDateString();
+
+            // Store the new topic in local storage
+            let chapters = JSON.parse(localStorage.getItem('chapters')) || [];
+            chapters.push({ creator: creatorName, name: topicName, notes: topicNotes, date: dateCreated });
+            localStorage.setItem('chapters', JSON.stringify(chapters));
+
+            // Clear the form
+            document.getElementById('creator-name').value = '';
+            document.getElementById('topic-name').value = '';
+            document.getElementById('topic-notes').value = '';
+
+            alert('Topic added successfully!');
+        });
+    </script>
+</body>
+</html>
